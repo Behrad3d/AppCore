@@ -120,7 +120,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     
     cell.medicationName.text = [self extractMedicationNamePrefix:self.lozenge.prescription.medication.name];
     
-    NSString  *doseNumberString = [NSString stringWithFormat:@"Dose %ld", (indexPath.row + 1)];
+    NSString  *doseNumberString = [NSString stringWithFormat:@"Dose %d", (indexPath.row + 1)];
     cell.doseNumber.text = doseNumberString;
     
     cell.doseAmount.text = self.lozenge.prescription.dosage.name;

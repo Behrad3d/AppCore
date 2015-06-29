@@ -1635,12 +1635,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     consentVC.navigationBar.topItem.title = NSLocalizedString(@"Consent", nil);
 	consentVC.delegate = self;
     
-#ifndef APC_HAVE_CONSENT
-#warning Adding watermark label until you define "APC_HAVE_CONSENT" to indicate that you have a real consenting document
-    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentVC.view.bounds
-                                                    withCenter:consentVC.view.center];
-    [consentVC.view insertSubview:watermarkLabel atIndex:NSUIntegerMax];
-#endif
+//#ifndef APC_HAVE_CONSENT
+//#warning Adding watermark label until you define "APC_HAVE_CONSENT" to indicate that you have a real consenting document
+//    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentVC.view.bounds
+//                                                    withCenter:consentVC.view.center];
+//    [consentVC.view insertSubview:watermarkLabel atIndex:NSUIntegerMax];
+//#endif
     
     [self presentViewController:consentVC animated:YES completion:nil];
 }

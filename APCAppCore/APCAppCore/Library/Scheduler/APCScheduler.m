@@ -2145,6 +2145,7 @@ static NSString * const kQueueName = @"APCScheduler CoreData query queue";
 {
     APCTask *task = nil;
     NSError *localError = nil;
+    
     NSFetchRequest *searchForThisExactTask = [APCTask requestWithPredicate: [NSPredicate predicateWithFormat: @"%K == %@ && %K == %@",
                                                                              NSStringFromSelector (@selector (taskID)),
                                                                              taskId,

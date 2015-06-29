@@ -34,6 +34,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+
+
+
 @class APCScheduledTask, APCTask;
 
 @interface APCSchedule : NSManagedObject

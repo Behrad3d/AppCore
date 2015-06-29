@@ -54,6 +54,8 @@ NSString *const kEndOfSurveyMarker          = @"END_OF_SURVEY";
 NSString *const kConstraintsKey   = @"constraints";
 NSString *const kUiHintKey   = @"uihint";
 NSString *const kSliderValue   = @"slider";
+NSString *const kSliderMaxValueDescription= @"maxValueDescription";
+NSString *const kSliderMinValueDescription= @"minValueDescription";
 
 
 @class APCDummyObject;
@@ -89,6 +91,7 @@ static APCDummyObject * _dummyObject;
 
 - (instancetype)initWithIdentifier: (NSString*) identifier survey:(SBBSurvey *)survey
 {
+    NSLog(@"%@",survey);
     self = [super init];
     if (self) {
         self.identifier = identifier;
@@ -96,6 +99,7 @@ static APCDummyObject * _dummyObject;
         self.rkSteps = [NSMutableDictionary dictionary];
         self.staticStepIdentifiers = [NSMutableArray array];
         self.setOfIdentifiers = [NSMutableSet set];
+        
         NSArray * elements = (survey.questions.count > 0) ? survey.questions : survey.elements;
         [elements enumerateObjectsUsingBlock:^(id object, NSUInteger __unused idx, BOOL * __unused stop) {
             if ([object isKindOfClass:[SBBSurveyQuestion class]]) {
@@ -435,9 +439,9 @@ static APCDummyObject * _dummyObject;
 + (ORKQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
 {
     ORKQuestionStep * retStep =[ORKQuestionStep questionStepWithIdentifier:question.identifier title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints uiHint:question.uiHint]];
-    if (question.detail.length > 0) {
-        retStep.text = question.detail;
-    }
+//    if (question.detail.length > 0) {
+//        retStep.text = question.detail;
+//    }
     if (question.promptDetail.length > 0) {
         retStep.text = question.promptDetail;
     }
@@ -547,7 +551,9 @@ static APCDummyObject * _dummyObject;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger __unused idx, BOOL * __unused stop) {
         NSString * detailText = option.detail.length > 0 ? option.detail : nil;
-        ORKTextChoice * choice = [ORKTextChoice choiceWithText:option.label detailText:detailText value:option.value];
+        ORKTextChoice * choice=[ORKTextChoice choiceWithText:option.label detailText:detailText value:option.value exclusive:YES];
+        
+
         [options addObject: choice];
     }];
     if (localConstraints.allowOtherValue) {
@@ -569,7 +575,12 @@ static APCDummyObject * _dummyObject;
                 NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
                 NSInteger newStepValue = (NSInteger)((double)[integerConstraint.maxValue integerValue] - (double)[integerConstraint.minValue integerValue]) / 10.0;
                 stepValue = MAX(newStepValue, stepValue);
-                retValue = [ORKScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
+                
+                NSString * maxValueDescription=objectDictionary[kSliderMaxValueDescription];
+                NSString * minValueDescription=objectDictionary[kSliderMinValueDescription];
+                
+                
+                retValue=[ORKScaleAnswerFormat scaleAnswerFormatWithMaximumValue:[integerConstraint.maxValue integerValue] minimumValue:[integerConstraint.minValue integerValue] defaultValue:0 step:stepValue vertical:NO maximumValueDescription:maxValueDescription minimumValueDescription:minValueDescription];
             }
             else {
                 ORKNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [ORKNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [ORKNumericAnswerFormat integerAnswerFormatWithUnit:nil];

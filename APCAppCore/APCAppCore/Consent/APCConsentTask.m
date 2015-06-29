@@ -380,7 +380,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
         else
         {
             self.currentQuestionStepSuffixValue = self.currentQuestionStepSuffixValue + 1;
-            self.currentQuestionStepSuffix = [NSString stringWithFormat:@"%@%04lu", kStepIdentifierSuffixStart, self.currentQuestionStepSuffixValue];
+            self.currentQuestionStepSuffix = [NSString stringWithFormat:@"%@%04lu", kStepIdentifierSuffixStart, (unsigned long)self.currentQuestionStepSuffixValue];
             
             NSMutableArray  *replacer = [NSMutableArray array];
             
